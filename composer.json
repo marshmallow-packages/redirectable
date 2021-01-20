@@ -1,0 +1,41 @@
+{
+    "name": "marshmallow/redirectable",
+    "description": "Store redirects via Nova and load them in your routes",
+    "keywords": [
+        "marshmallow",
+        "laravel-redirectable"
+    ],
+    "homepage": "https://gitlab.com/marshmallow-packages/redirectable",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Stef van Esch",
+            "email": "stef@marshmallow.dev",
+            "homepage": "https://marshmallow.dev",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^7.4|^8.0",
+        "illuminate/database": "^8.0",
+        "illuminate/support": "^8.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Marshmallow\\Redirectable\\": "src"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Marshmallow\\Redirectable\\RedirectableServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require-dev": {
+        "phpunit/phpunit": "^9.3",
+        "orchestra/testbench": "^6.2"
+    }
+}
