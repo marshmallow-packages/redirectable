@@ -16,7 +16,6 @@ If you discover any security related issues, please email stef@marshmallow.dev i
 
 ## Credits
 
-- [Freek Van der Herten](https://github.com/freekmurze)
 - [All Contributors](../../contributors)
 
 ## License
