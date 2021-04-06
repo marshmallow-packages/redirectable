@@ -3,6 +3,7 @@
 namespace Marshmallow\Redirectable;
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Eloquent\Model;
 use Marshmallow\HelperFunctions\Facades\URL;
 use Marshmallow\Redirectable\Models\Redirect;
@@ -71,14 +72,30 @@ class Redirector
      */
     public function routes(): void
     {
-        $redirect_array = [];
-        $redirects = Redirect::get();
-        foreach ($redirects as $redirect) {
-            if (URL::routeUriExists($redirect->redirect_this)) {
-                continue;
-            }
+        if ($this->shouldLoadRoutes()) {
+            $redirect_array = [];
+            $redirects = Redirect::get();
+            foreach ($redirects as $redirect) {
+                if (URL::routeUriExists($redirect->redirect_this)) {
+                    continue;
+                }
 
-            Route::get($redirect->redirect_this, '\Marshmallow\Redirectable\Http\Controllers\RedirectController');
+                Route::get($redirect->redirect_this, '\Marshmallow\Redirectable\Http\Controllers\RedirectController');
+            }
         }
+    }
+
+    protected function shouldLoadRoutes(): bool
+    {
+        if (!Schema::hasTable('redirects')) {
+            /**
+             * Don't load the routes if the pages table
+             * doesnt exist. If this is the case, the
+             * migrations haven't fully run yet.
+             */
+            return false;
+        }
+
+        return true;
     }
 }
