@@ -1,6 +1,11 @@
 <?php
 
 return [
+
+    'models' => [
+        'redirect' => \Marshmallow\Redirectable\Models\Redirect::class,
+    ],
+
     'types' => [
         \Marshmallow\Pages\Nova\Page::class,
     ],

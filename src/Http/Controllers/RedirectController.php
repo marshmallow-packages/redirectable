@@ -5,7 +5,6 @@ namespace Marshmallow\Redirectable\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Redirect as IlluminateRedirect;
-use Marshmallow\Redirectable\Models\Redirect;
 
 class RedirectController extends Controller
 {
@@ -16,8 +15,8 @@ class RedirectController extends Controller
         /**
          * Check of we can find a redirect with this path
          */
-        $redirect = Redirect::where('redirect_this', $uri)->first();
-        if (! $redirect) {
+        $redirect = config('redirectable.models.redirect')::where('redirect_this', $uri)->first();
+        if (!$redirect) {
             $this->noRedirectFoundResponse();
         }
 
@@ -25,7 +24,7 @@ class RedirectController extends Controller
          * Check if we can find a final destination for this path
          */
         $final_route = $redirect->getFinalRedirect();
-        if (! $final_route) {
+        if (!$final_route) {
             $this->noRedirectFoundResponse();
         }
 

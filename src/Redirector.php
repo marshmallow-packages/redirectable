@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Eloquent\Model;
 use Marshmallow\HelperFunctions\Facades\URL;
-use Marshmallow\Redirectable\Models\Redirect;
 
 class Redirector
 {
@@ -74,7 +73,7 @@ class Redirector
     {
         if ($this->shouldLoadRoutes()) {
             $redirect_array = [];
-            $redirects = Redirect::get();
+            $redirects = config('redirectable.models.redirect')::get();
             foreach ($redirects as $redirect) {
                 if (URL::routeUriExists($redirect->redirect_this)) {
                     continue;
