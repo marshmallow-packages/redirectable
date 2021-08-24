@@ -2,6 +2,10 @@
 
 return [
 
+    'database' => [
+        'connection' => null,
+    ],
+
     'models' => [
         'redirect' => \Marshmallow\Redirectable\Models\Redirect::class,
     ],

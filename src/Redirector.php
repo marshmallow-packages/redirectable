@@ -86,7 +86,10 @@ class Redirector
 
     protected function shouldLoadRoutes(): bool
     {
-        if (!Schema::hasTable('redirects')) {
+        $connection = $this->getDatabaseConnection();
+        $schema_builder = Schema::connection($connection);
+
+        if (!$schema_builder->hasTable('pages')) {
             /**
              * Don't load the routes if the pages table
              * doesnt exist. If this is the case, the
@@ -96,5 +99,10 @@ class Redirector
         }
 
         return true;
+    }
+
+    protected function getDatabaseConnection()
+    {
+        return config('redirectable.database.connection');
     }
 }
