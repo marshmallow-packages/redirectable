@@ -72,15 +72,25 @@ class Redirector
     public function routes(): void
     {
         if ($this->shouldLoadRoutes()) {
-            $redirect_array = [];
-            $redirects = config('redirectable.models.redirect')::get();
-            foreach ($redirects as $redirect) {
-                if (URL::routeUriExists($redirect->redirect_this)) {
-                    continue;
-                }
+            $routes = \Route::getRoutes()->getRoutes();
+            $route_uris = collect($routes)->map(function ($route) {
+                return $route->uri();
+            })->unique();
 
-                Route::get($redirect->redirect_this, '\Marshmallow\Redirectable\Http\Controllers\RedirectController');
-            }
+            $redirect_array = [];
+
+            config('redirectable.models.redirect')::cursor()
+                ->reject(function ($redirect) use (&$route_uris) {
+                    $exists = URL::routeUriExists($redirect->redirect_this, $route_uris);
+
+                    if (!$exists) {
+                        $route_uris = $route_uris->add($redirect->redirect_this);
+                    }
+
+                    return $exists;
+                })->each(function ($redirect) {
+                    Route::get($redirect->redirect_this, '\Marshmallow\Redirectable\Http\Controllers\RedirectController');
+                });
         }
     }
 
