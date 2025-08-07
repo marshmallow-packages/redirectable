@@ -30,7 +30,6 @@ class Redirector
      * redirect anymore.
      * @license Test
      * @link    Test
-     * @return  [type] [description]
      */
     public function deleteUnusedRedirects(Model $model, string $to_this): void
     {
