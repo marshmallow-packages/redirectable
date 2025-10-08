@@ -3,10 +3,10 @@
 namespace Marshmallow\Redirectable\Nova;
 
 use App\Nova\Resource;
+use Laravel\Nova\Tabs\Tab;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\MorphTo;
-use Laravel\Nova\Fields\Tabs;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Redirect extends Resource
@@ -73,15 +73,15 @@ class Redirect extends Resource
     public function fields(NovaRequest $request)
     {
         return [
-            Tabs::make(__('Redirect Details'), [
-                Tabs\Tab::make(__('Basic Information'), [
+            Tab::group(__('Redirect Details'), [
+                Tab::make(__('Basic Information'), [
                     Text::make(__('Redirect this'), 'redirect_this')->rules('required'),
                     Text::make(__('To this'), 'to_this')->rules('required'),
                     Select::make(__('HTTP code'), 'http_code')->options(
                         config('redirectable.http_codes')
                     )->rules('required'),
                 ]),
-                Tabs\Tab::make(__('Association'), [
+                Tab::make(__('Association'), [
                     MorphTo::make(__('Redirectable'), 'redirectable')->types(
                         config('redirectable.types')
                     )->nullable(),
