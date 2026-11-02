@@ -2,6 +2,8 @@
 
 namespace Marshmallow\Redirectable;
 
+use PDOException;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Eloquent\Model;
@@ -98,12 +100,23 @@ class Redirector
         $connection = $this->getDatabaseConnection();
         $schema_builder = Schema::connection($connection);
 
-        if (!$schema_builder->hasTable('pages')) {
+        try {
+            if (!$schema_builder->hasTable('pages')) {
+                /**
+                 * Don't load the routes if the pages table
+                 * doesnt exist. If this is the case, the
+                 * migrations haven't fully run yet.
+                 */
+                return false;
+            }
+        } catch (QueryException|PDOException $e) {
             /**
-             * Don't load the routes if the pages table
-             * doesnt exist. If this is the case, the
-             * migrations haven't fully run yet.
+             * This runs while the application boots. If the
+             * database is unreachable, report it and skip the
+             * routes so queue workers survive the outage.
              */
+            report($e);
+
             return false;
         }
 
